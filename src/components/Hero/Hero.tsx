@@ -10,17 +10,19 @@ export default function Hero() {
             The people platform—Where interests become friendships
           </h1>
           <p className="mt-5">
-            Whatever your interest, from hiking and reading to networking and
-            skill sharing, there are thousands of people who share it on Meetup.
-            Events are happening every day—sign up to join the fun.
+            Evently project is build with React/Next 13 with static and SRG
+            components, Tailwinds, Google places and it allows you to create
+            events and book events. The back is build with the Serverless
+            Framework with AWS.
           </p>
-          <div className="mt-7">
+          <div className="mt-7 flex  gap-4">
             <LinkButton href="#">Join Evently</LinkButton>
+            <LinkButton href="#">Check my portfolio</LinkButton>
           </div>
         </div>
         <div>
           <Image
-            src="/images/Group.jpg"
+            src="/images/Group.svg"
             alt="People doing networking"
             width={500}
             height={280}
