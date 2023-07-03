@@ -1,5 +1,6 @@
 import Card from './Card';
 import { LinkButton } from '../LinkButton/LinkButton';
+import Instructions from '../Home/Instructions/Instructions';
 
 const EVENTS = [
   {
@@ -36,30 +37,6 @@ const BUTTONS = [
   { title: 'learn JavaScript', href: '#' },
 ];
 
-const INSTRUCTIONS = {
-  header: {
-    title: 'How it works Evently',
-    text: 'Meet new people who share your interests through online and in-person events. It’s free to create an account.',
-  },
-  cards: [
-    {
-      icon: '',
-      title: 'Find an event',
-      text: 'Find the event according our interests and your location, you will find what your are looking for!',
-    },
-    {
-      icon: '',
-      title: 'Book an event',
-      text: 'There are thousands of events, and with just two click you will be able to join and discover amazing people',
-    },
-    {
-      icon: '',
-      title: 'Create it',
-      text: 'You can also create your own event and create a community with your interests',
-    },
-  ],
-};
-
 export default function Event() {
   return (
     <>
@@ -79,6 +56,7 @@ export default function Event() {
           ))}
         </div>
       </section>
+      <Instructions />
     </>
   );
 }
