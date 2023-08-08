@@ -1,6 +1,6 @@
 'use client';
 import { useForm } from 'react-hook-form';
-import { Button } from '../Button/Button';
+import { Button } from '../Shared/Button/Button';
 
 interface UserFormProps {
   onSubmit: (data: any) => void;
