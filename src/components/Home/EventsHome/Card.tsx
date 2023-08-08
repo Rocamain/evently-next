@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { LinkButton } from '../LinkButton/LinkButton';
+import { LinkButton } from '../../Shared/LinkButton/LinkButton';
 
 interface PhotoProps {
   src: string;

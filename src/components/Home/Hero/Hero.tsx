@@ -1,4 +1,4 @@
-import { LinkButton } from '../LinkButton/LinkButton';
+import { LinkButton } from '../../Shared/LinkButton/LinkButton';
 import Image from 'next/image';
 
 export default function Hero() {

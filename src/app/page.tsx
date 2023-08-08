@@ -1,5 +1,5 @@
-import Hero from '@/components/Hero/Hero';
-import EventSHome from '@/components/EventsHome/EventsHome';
+import Hero from '@/components/Home/Hero/Hero';
+import EventSHome from '@/components/Home/EventsHome/EventsHome';
 
 export default function Home() {
   return (
