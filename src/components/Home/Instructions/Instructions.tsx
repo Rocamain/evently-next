@@ -1,5 +1,5 @@
 import CardInstructions from './CardInstructions';
-import { LinkButton } from '@/components/LinkButton/LinkButton';
+import { LinkButton } from '@/components/Shared/LinkButton/LinkButton';
 
 const INSTRUCTIONS = {
   header: {
@@ -39,7 +39,7 @@ export default function Instructions() {
           {INSTRUCTIONS.header.text}
         </p>
       </div>
-      <div className="flex flex-wrap gap-x-2 gap-y-3 md:flex-nowrap sm:px-2 md:px-4 mb-10">
+      <div className="flex flex-wrap  justify-center gap-x-2 gap-y-3 md:flex-nowrap sm:px-2 md:px-4 mb-10">
         {INSTRUCTIONS.cards.map((card) => (
           <CardInstructions key={card.title} {...card} />
         ))}

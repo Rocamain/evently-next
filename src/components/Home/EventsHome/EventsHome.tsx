@@ -1,6 +1,7 @@
 import Card from './Card';
-import { LinkButton } from '../LinkButton/LinkButton';
-import Instructions from '../Home/Instructions/Instructions';
+import { LinkButton } from '../../Shared/LinkButton/LinkButton';
+import Instructions from '../Instructions/Instructions';
+import OnlineEvents from '../OnlineEvents/OnlineEvents';
 
 const EVENTS = [
   {
@@ -57,6 +58,7 @@ export default function Event() {
         </div>
       </section>
       <Instructions />
+      <OnlineEvents />
     </>
   );
 }

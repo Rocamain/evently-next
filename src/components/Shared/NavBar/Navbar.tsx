@@ -4,7 +4,7 @@ import { LinkButton } from '../LinkButton/LinkButton';
 
 export default function Navbar() {
   return (
-    <nav className="p-5 sm:p-5 md:px-10">
+    <nav className="p-5 sm:p-5 md:px-10 relative z-10">
       <div className="flex flex-row items-center justify-between gap-3 h-100">
         <div className="flex sm:items-center sm:justify-between">
           <div className="flex ">
@@ -17,7 +17,7 @@ export default function Navbar() {
           </div>
           <form
             action=""
-            className="hidden sm:flex sm:flex-row sm:items-center sm:justify-between "
+            className="hidden sm:flex sm:flex-row sm:items-center sm:justify-between"
           >
             <div className="flex flex-row items-center justify-between">
               <svg
