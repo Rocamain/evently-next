@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 type ChevronProps = {
-  clickHandler: (px: number) => void;
+  clickHandler: (isLeft: boolean) => void;
   left?: boolean;
   right?: boolean;
 };
@@ -11,7 +11,7 @@ const ChevronBtn: FC<ChevronProps> = ({ clickHandler, left, right }) => {
     return (
       <div className="h-full absolute right-[1.2rem]">
         <button
-          onClick={() => clickHandler(-250)}
+          onClick={() => clickHandler(false)}
           className="absolute h-[40px] w-[40px] bg-slate-100 rounded-full shadow-chevron hover:shadow-chevron-hover inset-y-0 my-auto z-10 border-solid-2px border- hover:bottom-1"
         >
           <div style={{ width: '16px', height: '16px', margin: '0 auto' }}>
@@ -41,7 +41,7 @@ const ChevronBtn: FC<ChevronProps> = ({ clickHandler, left, right }) => {
     return (
       <div className="h-full absolute left-[-1.2rem]">
         <button
-          onClick={() => clickHandler(250)}
+          onClick={() => clickHandler(true)}
           className="absolute h-[40px] w-[40px] bg-slate-100 rounded-full shadow-chevron hover:shadow-chevron-hover inset-y-0 my-auto z-10 border-solid-2px border- hover:bottom-1"
         >
           <div style={{ width: '16px', height: '16px', margin: '0 auto' }}>
