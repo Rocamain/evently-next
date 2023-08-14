@@ -1,23 +1,23 @@
-import Image from 'next/image';
-import { LinkButton } from '../../Shared/LinkButton/LinkButton';
+import Image from 'next/image'
+import { LinkButton } from '../../Shared/LinkButton/LinkButton'
 
 interface PhotoProps {
-  src: string;
-  alt: string;
+  src: string
+  alt: string
 }
 
 interface LinkProps {
-  title: string;
-  href: string;
+  title: string
+  href: string
 }
 
 interface EventCardProps {
-  photo: PhotoProps;
-  link: LinkProps;
+  photo: PhotoProps
+  link: LinkProps
 }
 
 export default function Card(props: EventCardProps) {
-  const { photo, link } = props;
+  const { photo, link } = props
 
   return (
     <div className="flex items-start order-none">
@@ -42,5 +42,5 @@ export default function Card(props: EventCardProps) {
         </div>
       </div>
     </div>
-  );
+  )
 }

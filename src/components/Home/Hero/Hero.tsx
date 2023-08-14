@@ -1,5 +1,5 @@
-import { LinkButton } from '../../Shared/LinkButton/LinkButton';
-import Image from 'next/image';
+import { LinkButton } from '../../Shared/LinkButton/LinkButton'
+import Image from 'next/image'
 
 export default function Hero() {
   return (
@@ -31,5 +31,5 @@ export default function Hero() {
         </div>
       </div>
     </div>
-  );
+  )
 }

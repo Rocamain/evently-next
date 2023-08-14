@@ -1,7 +1,7 @@
-import Card from './Card';
-import { LinkButton } from '../../Shared/LinkButton/LinkButton';
-import Instructions from '../Instructions/Instructions';
-import OnlineEvents from '../OnlineEvents/OnlineEvents';
+import Card from './Card'
+import { LinkButton } from '../../Shared/LinkButton/LinkButton'
+import Instructions from '../Instructions/Instructions'
+import OnlineEvents from '../OnlineEvents/OnlineEvents'
 
 const EVENTS = [
   {
@@ -26,7 +26,7 @@ const EVENTS = [
     },
     link: { title: 'Connect over tech', href: '#tech' },
   },
-];
+]
 
 const BUTTONS = [
   { title: 'Boost your career', href: '#' },
@@ -36,7 +36,7 @@ const BUTTONS = [
   { title: 'Language exchange', href: '#' },
   { title: 'Find your zen', href: '#' },
   { title: 'learn JavaScript', href: '#' },
-];
+]
 
 export default function Event() {
   return (
@@ -60,5 +60,5 @@ export default function Event() {
       <Instructions />
       <OnlineEvents />
     </>
-  );
+  )
 }

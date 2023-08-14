@@ -1,8 +1,8 @@
 interface ButtonProps {
-  children: React.ReactNode;
-  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  disabled?: boolean;
-  light?: boolean;
+  children: React.ReactNode
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
+  disabled?: boolean
+  light?: boolean
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -18,5 +18,5 @@ export const Button: React.FC<ButtonProps> = ({
     >
       {children}
     </button>
-  );
-};
+  )
+}

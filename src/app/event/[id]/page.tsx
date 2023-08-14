@@ -1,23 +1,23 @@
-import Link from 'next/link';
-import Image from 'next/image';
+import Link from 'next/link'
+import Image from 'next/image'
 
 async function getData(id: string) {
-  const res = await fetch(`http://localhost:4000/item/${id}`);
+  const res = await fetch(`http://localhost:4000/item/${id}`)
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
-    throw new Error('Failed to fetch data');
+    throw new Error('Failed to fetch data')
   }
 
-  return res.json();
+  return res.json()
 }
 
 export default async function events({ params }: { params: { id: string } }) {
-  const { data } = await getData(params.id);
-  const { eventOwnerName, eventTitle, eventDescription, eventLink } = data;
-  const descriptionParagraphs = eventDescription.split('\n');
-  console.log(descriptionParagraphs);
-  console.log({ data });
+  const { data } = await getData(params.id)
+  const { eventOwnerName, eventTitle, eventDescription, eventLink } = data
+  const descriptionParagraphs = eventDescription.split('\n')
+  console.log(descriptionParagraphs)
+  console.log({ data })
   return (
     <div className="relative">
       <div className="relative z-10 px-5 w-full border-b border-shadowColor py-2 lg:py-6">
@@ -66,5 +66,5 @@ export default async function events({ params }: { params: { id: string } }) {
         </div>
       </div>
     </div>
-  );
+  )
 }

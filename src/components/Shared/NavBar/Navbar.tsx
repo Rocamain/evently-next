@@ -1,6 +1,6 @@
-import Link from 'next/link';
-import Logo from './Logo';
-import { LinkButton } from '../LinkButton/LinkButton';
+import Link from 'next/link'
+import Logo from './Logo'
+import { LinkButton } from '../LinkButton/LinkButton'
 
 export default function Navbar() {
   return (
@@ -133,5 +133,5 @@ export default function Navbar() {
         </button>
       </form>
     </nav>
-  );
+  )
 }

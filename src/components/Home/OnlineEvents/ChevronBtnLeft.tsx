@@ -1,8 +1,8 @@
-import { FC } from 'react';
+import { FC } from 'react'
 
 type ChevronProps = {
-  clickHandler: (px: number) => void;
-};
+  clickHandler: (px: number) => void
+}
 
 const ChevronBtnLeft: FC<ChevronProps> = ({ clickHandler }) => {
   return (
@@ -32,7 +32,7 @@ const ChevronBtnLeft: FC<ChevronProps> = ({ clickHandler }) => {
         </div>
       </button>
     </div>
-  );
-};
+  )
+}
 
-export default ChevronBtnLeft;
+export default ChevronBtnLeft
