@@ -10,9 +10,9 @@
     "prepare": "husky install",
     "lint:fix": "eslint . --fix --ext .js",
     "style:lint": "eslint '**/*.js'",
-    "style:prettier": "prettier --check '**/*.js'",
+    "style:prettier": "prettier --check '**/*.{js,ts,tsx}'",
     "style:all": "npm run style:lint && npm run style:prettier",
-    "pretty:fix": "prettier --write '**/*.js'"
+    "pretty:fix": "prettier '**/*.{js,ts,tsx}' --write"
   },
   "dependencies": {
     "@types/node": "20.3.2",
