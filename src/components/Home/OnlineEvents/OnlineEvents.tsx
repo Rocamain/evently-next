@@ -113,7 +113,7 @@ export default function OnlineEvents() {
         <h3 className="font-semibold text-2xl sm:text-3xl mb-2">
           Next Online Events
         </h3>
-        <LinkButton href="" transparent={true} tealText={true}>
+        <LinkButton href="#" transparent={true} tealText={true}>
           More events
         </LinkButton>
       </div>
