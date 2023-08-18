@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image from 'next/image'
 export default function Logo() {
   return (
     <Image
@@ -8,5 +8,5 @@ export default function Logo() {
       height={70}
       priority={true}
     />
-  );
+  )
 }

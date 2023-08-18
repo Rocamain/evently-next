@@ -1,20 +1,20 @@
-import Link from 'next/link';
-import Image from 'next/image';
+import Link from 'next/link'
+import Image from 'next/image'
 
-type DateTime = string[];
+type DateTime = string[]
 type User =
   | {
-      name: string;
-      link: string;
+      name: string
+      link: string
     }
-  | {};
+  | {}
 
 interface OnlineCardProps {
-  dateTime: DateTime;
-  link: string;
-  title: string;
-  photo: string;
-  users: Array<User>;
+  dateTime: DateTime
+  link: string
+  title: string
+  photo: string
+  users: Array<User>
 }
 const MONTHS: Array<string> = [
   'Jan',
@@ -29,12 +29,12 @@ const MONTHS: Array<string> = [
   'Oct',
   'Nov',
   'Dec',
-];
+]
 
 export default function CardOnline(props: OnlineCardProps) {
-  const { dateTime, title, photo, users, link } = props;
-  let [day, month, year] = dateTime[0].split('/');
-  const time = dateTime[1];
+  const { dateTime, title, photo, users, link = '#' } = props
+  let [day, month, year] = dateTime[0].split('/')
+  const time = dateTime[1]
 
   return (
     <Link href={link} className="grow-0 shrink-0 w-auto flex h-full flex-col">
@@ -53,5 +53,5 @@ export default function CardOnline(props: OnlineCardProps) {
         <h4 className="font-lg text-gray-500 line-clamp-3">{title}</h4>
       </div>
     </Link>
-  );
+  )
 }

@@ -1,12 +1,12 @@
-import Link, { LinkProps } from 'next/link';
-import { FC } from 'react';
+import Link, { LinkProps } from 'next/link'
+import { FC } from 'react'
 
 interface ButtonProps extends LinkProps {
-  children: React.ReactNode;
-  transparent?: boolean;
-  circular?: boolean;
-  tealText?: boolean;
-  bigText?: boolean;
+  children: React.ReactNode
+  transparent?: boolean
+  circular?: boolean
+  tealText?: boolean
+  bigText?: boolean
 }
 
 export const LinkButton: FC<ButtonProps> = ({
@@ -32,7 +32,7 @@ export const LinkButton: FC<ButtonProps> = ({
         bigText ? 'text-lg' : 'text-md'
       } p-2 px-3 whitespace-nowrap bg-teal-600 text-white font-medium hover:bg-teal-500 ${
         circular ? 'rounded-full p-2' : 'rounded-md'
-      }`;
+      }`
 
   if (!transparent) {
   }
@@ -49,5 +49,5 @@ export const LinkButton: FC<ButtonProps> = ({
     >
       {children}
     </Link>
-  );
-};
+  )
+}

@@ -1,5 +1,5 @@
-import CardInstructions from './CardInstructions';
-import { LinkButton } from '@/components/Shared/LinkButton/LinkButton';
+import CardInstructions from './CardInstructions'
+import { LinkButton } from '@/components/Shared/LinkButton/LinkButton'
 
 const INSTRUCTIONS = {
   header: {
@@ -26,7 +26,7 @@ const INSTRUCTIONS = {
       text: 'You can also create your own event and create a community with your interests',
     },
   ],
-};
+}
 
 export default function Instructions() {
   return (
@@ -48,5 +48,5 @@ export default function Instructions() {
         <LinkButton href="#">Join us</LinkButton>
       </div>
     </section>
-  );
+  )
 }

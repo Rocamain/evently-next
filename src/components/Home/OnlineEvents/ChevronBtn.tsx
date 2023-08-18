@@ -1,10 +1,10 @@
-import { FC } from 'react';
+import { FC } from 'react'
 
 type ChevronProps = {
-  clickHandler: (isLeft: boolean) => void;
-  left?: boolean;
-  right?: boolean;
-};
+  clickHandler: (isLeft: boolean) => void
+  left?: boolean
+  right?: boolean
+}
 
 const ChevronBtn: FC<ChevronProps> = ({ clickHandler, left, right }) => {
   if (right) {
@@ -35,7 +35,7 @@ const ChevronBtn: FC<ChevronProps> = ({ clickHandler, left, right }) => {
           </div>
         </button>
       </div>
-    );
+    )
   }
   if (left) {
     return (
@@ -65,9 +65,9 @@ const ChevronBtn: FC<ChevronProps> = ({ clickHandler, left, right }) => {
           </div>
         </button>
       </div>
-    );
+    )
   }
-  return null;
-};
+  return null
+}
 
-export default ChevronBtn;
+export default ChevronBtn
