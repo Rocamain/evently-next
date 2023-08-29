@@ -14,16 +14,14 @@ export const metadata = {
 
 const getPath = () => {
   const headersList = headers()
-  const pathname = headersList.get('x-invoke-path') || ''
+  const pathname = headersList.get('x-invoke-path') as string
   return pathname
 }
 
 export default function RootLayout({
   children,
-  random,
 }: {
   children: React.ReactNode
-  random: number
 }) {
   const pathname = getPath()
 
@@ -31,18 +29,17 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <main
-          id={pathname === '/' ? 'background-main' : undefined}
+          id={pathname === '/' ? 'background-blob' : undefined}
           className="relative -z-1 overflow-hidden min-h-full"
         >
           <AuthProvider>
             <Navbar path={pathname} />
             {children}
           </AuthProvider>
+
           <footer
             style={{ height: '25vh', backgroundColor: 'black', color: 'white' }}
-          >
-            {random}
-          </footer>
+          ></footer>
         </main>
       </body>
     </html>

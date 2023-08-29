@@ -1,67 +1,58 @@
-import { cookies } from 'next/headers'
 import axios from 'axios'
 import { NextResponse, NextRequest } from 'next/server'
-import { User, LoginData, ApiResponse } from '@/lib/interfaces'
+import { LoginData, LoginResponse } from '@/lib/interfaces'
 
-const requestAccess = async (loginData: LoginData) => {
-  const URL = `${process.env.DB_URL}/login`
-  const response = await axios.post<ApiResponse<User>>(URL, loginData, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
+const URL = `${process.env.DB_URL}/login`
 
-  if (response.statusText === 'OK') {
-    const { AccessToken, ExpiresIn, RefreshToken, userInfo } =
-      response.data.data
-
-    cookies().set('AccessToken', AccessToken, {
-      maxAge: ExpiresIn,
-      httpOnly: true,
-    })
-    cookies().set('RefreshToken', RefreshToken, {
-      maxAge: ExpiresIn,
-      httpOnly: true,
-    })
-    cookies().set('UserInfo', JSON.stringify(userInfo), {
-      maxAge: ExpiresIn,
-      httpOnly: true,
-    })
-  } else {
-    throw new Error('Oops something Strange happened')
-  }
-}
-
+// Create the Login Api point to call the DB for Auth
 export async function POST(request: NextRequest) {
-  const loginPayload = await request.json()
-
   try {
-    await requestAccess(loginPayload)
+    const parserRequest = await request.json()
+    const loginPayload = parserRequest.body as LoginData
 
-    return new Response(JSON.stringify({ message: 'login successful' }), {
-      status: 200,
+    const { data, status, statusText } = await axios.post(URL, loginPayload, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
     })
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const errorData = error.response as {
-        status: number
-        data: { message: string }
-      }
 
-      if (errorData?.data) {
+    const response = NextResponse.json(data, { status, statusText })
+
+    return response
+  } catch (error) {
+    // If axios error
+    if (axios.isAxiosError<LoginResponse>(error)) {
+      // Connection Error with DB
+      if (error.code === 'ECONNREFUSED') {
         return NextResponse.json(
-          { error: errorData.data.message },
-          { status: errorData.status },
+          {
+            error: {
+              message: 'Something unexpected happened',
+              name: 'Server error',
+            },
+          },
+          { status: 500, statusText: 'Server Down' },
         )
       }
-      return NextResponse.json(
-        { error: 'Oop something weird happened' },
-        { status: 400 },
-      )
+
+      // In case other error
+      const data = error.response?.data
+      const status = error.response?.status
+      const statusText = error.response?.statusText
+      const response = NextResponse.json(data, { status, statusText })
+
+      return response
     }
+
+    // Fallback error
     return NextResponse.json(
-      { error: 'Internal Server Error' },
-      { status: 500 },
+      {
+        error: {
+          message: 'Something unexpected happened',
+          name: 'Server error',
+        },
+      },
+      { status: 500, statusText: 'Server Down' },
     )
   }
 }

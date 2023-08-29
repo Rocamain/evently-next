@@ -2,15 +2,14 @@ import Link from 'next/link'
 import Logo from './Logo'
 import { LinkButton } from '@/components/Shared/LinkButton/LinkButton'
 import SearchBar from '@/components/Shared/SearchBar/SearchBar'
-import { checkIsLogged, logout } from '@/app/actions'
+import AuthButtonsContext from '@/components/Shared/NavBar/AuthButtonsContext'
+import LogoutButton from '@/components/Shared/NavBar/LogoutButton'
 
 interface NavbarProps {
   path: string
 }
 
 export default async function Navbar({ path }: NavbarProps) {
-  const isLogged: boolean = await checkIsLogged()
-
   const notAuthPath = path !== '/login' && path !== '/register'
 
   return (
@@ -30,33 +29,24 @@ export default async function Navbar({ path }: NavbarProps) {
             <SearchBar />
           </div>
         </div>
+
         <ul className=" flex justify-end space-x-4 items-center w-40">
-          {isLogged ? (
-            <li className="">
-              <form action={logout}>
-                <button type="submit">Logout</button>
-              </form>
+          <LogoutButton />
+          <AuthButtonsContext>
+            <li>
+              <LinkButton href="/login" transparent={true}>
+                Log in
+              </LinkButton>
             </li>
-          ) : (
-            <>
-              <li>
-                <LinkButton href="/login" transparent={true}>
-                  Log in
-                </LinkButton>
-              </li>
-              <li>
-                <LinkButton href="/register">Register</LinkButton>
-              </li>
-            </>
-          )}
+            <li>
+              <LinkButton href="/register">Register</LinkButton>
+            </li>
+          </AuthButtonsContext>
         </ul>
       </div>
       {/* Only display on path that are not login or register */}
       {notAuthPath && (
-        <form
-          action=""
-          className="flex flex-row items-center justify-between mt-10 sm:hidden"
-        >
+        <form className="flex flex-row items-center justify-between mt-10 sm:hidden">
           <div className="grow">
             <div className="flex flex-row items-center justify-between">
               <input
