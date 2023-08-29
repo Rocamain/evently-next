@@ -1,51 +1,55 @@
 import axios from 'axios'
 import { NextResponse, NextRequest } from 'next/server'
-import {
-  ApiResponse,
-  RegisterData,
-  CreateUserResponse,
-  CreateUserResponseError,
-} from '@/lib/interfaces'
+import { UserData, LoginResponse } from '@/lib/interfaces'
 
-const requestRegistration = async (
-  payload: RegisterData,
-): Promise<ApiResponse<CreateUserResponse>> => {
-  const URL = `${process.env.DB_URL}/join`
-
-  const { data, status, statusText } = await axios.post(URL, payload, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-
-  return { data, status, statusText }
-}
-
-export async function POST(request: NextRequest) {
-  const registrationPayload = await request.json()
+// Create the Register Api point to call the DB for Auth
+export async function POST(request: NextRequest, res: NextResponse) {
   try {
-    const data = await requestRegistration(registrationPayload)
+    const response = await request.json()
+    const regPayload = response.body as UserData
+    const URL = `${process.env.DB_URL}/join`
 
-    if (data.status === 201) {
-      return NextResponse.json(data)
-    }
+    const { data, status, statusText } = await axios.post(URL, regPayload, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    return NextResponse.json(data, { status, statusText })
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const errorData = error.response as ApiResponse<CreateUserResponseError>
+    // If axios error
+    if (axios.isAxiosError<LoginResponse>(error)) {
+      // Connection Error with DB
 
-      if (errorData.data) {
+      if (error.code === 'ECONNREFUSED') {
         return NextResponse.json(
-          { error: errorData.data.error.message },
-          { status: errorData.status },
+          {
+            error: {
+              message: 'Something unexpected happened',
+              name: 'Server error',
+            },
+          },
+          { status: 500, statusText: 'Server Down' },
         )
       }
-      return NextResponse.json(
-        {
-          error:
-            'Oops something happened in our server. Please give us time to fix it.',
-        },
-        { status: 500 },
-      )
+
+      // In case other error
+      const data = error.response?.data
+      const status = error.response?.status
+      const statusText = error.response?.statusText
+
+      return NextResponse.json(data, { status, statusText })
     }
+
+    // Fallback error
+    return NextResponse.json(
+      {
+        error: {
+          message: 'Something unexpected happened',
+          name: 'Server error',
+        },
+      },
+      { status: 500, statusText: 'Server Down' },
+    )
   }
 }

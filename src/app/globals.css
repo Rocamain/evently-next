@@ -15,8 +15,15 @@
 body {
   color: rgb(var(--foreground-rgb));
 }
+.background-blob {
+  background-image: url(../../public/images/blob/pink-blob.svg),
+    url(../../public/images/blob/blue-blob.svg);
+  background-position-y: -5%, 120%;
+  background-position-x: 2%, 140%;
+  background-repeat: no-repeat;
+}
 
-#background-main {
+#background-blob {
   background-image: url(../../public/images/blob/pink-blob.svg),
     url(../../public/images/blob/blue-blob.svg),
     url(../../public/images/blob/blue-blob.svg),
@@ -25,3 +32,21 @@ body {
   background-position-x: 60%, 70%, 15%, 80%;
   background-repeat: no-repeat;
 }
+
+/* input + span {
+  padding-right: 30px;
+} */
+
+/* input:invalid + span::after {
+  position: absolute;
+  content: '✖';
+  padding-left: 5px;
+  color: #8b0000;
+} */
+
+/* input:valid + span::after {
+  position: absolute;
+  content: '✓';
+  padding-left: 5px;
+  color: #009000;
+} */
