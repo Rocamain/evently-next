@@ -1,6 +1,6 @@
 'use client'
 import { useState, ChangeEvent, FormEvent, FC } from 'react'
-import { useAuth } from '@/components/Shared/AuthProvider/AuthProvider'
+import { useAuth } from '@/context/AuthProvider/AuthProvider'
 import { LoginData, LoginError } from '@/lib/interfaces'
 import FormTemplate from '@/components/Shared/FormTemplate/FormTemplate'
 import { ContainerInput } from '@/components/Shared/CustomInput/CustomInput'
@@ -31,13 +31,12 @@ const LoginPage: FC = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const { error, message } = await login(loginData)
+    const { error } = await login(loginData)
 
     if (error) {
       setLoginError(error.message)
     } else {
       // PENDING IMPLEMENTATION FOR SUCCESS
-      console.log(message)
     }
   }
   const canSave = [...Object.values(loginData)].every(Boolean)

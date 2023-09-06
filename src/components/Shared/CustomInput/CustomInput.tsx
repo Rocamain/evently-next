@@ -1,3 +1,4 @@
+'use client'
 import React, { FC, ChangeEvent, useState } from 'react'
 
 interface ContainerInputProps {
