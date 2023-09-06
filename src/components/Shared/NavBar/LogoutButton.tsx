@@ -1,17 +1,18 @@
 'use client'
 import React from 'react'
-import { useAuth } from '@/components/Shared/AuthProvider/AuthProvider'
+import { logoutUser } from '@/app/actions/actions'
+import { useAuth } from '@/context/AuthProvider/AuthProvider'
 
 export default function LogoutButton() {
-  const { isAuthenticated, logout, isMounted } = useAuth()
+  const { logout } = useAuth()
 
-  if (isMounted && isAuthenticated) {
-    return (
-      <li className="">
-        <button onClick={logout}>Logout</button>
-      </li>
-    )
-  }
-
-  return null
+  return (
+    <li className="">
+      <form action={logoutUser}>
+        <button onClick={logout} type="submit">
+          Logout
+        </button>
+      </form>
+    </li>
+  )
 }
