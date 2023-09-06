@@ -160,7 +160,6 @@ export const getEventData = async (
   const res = await fetch(`${process.env.DB_URL}/item/${id}`)
 
   if (!res.ok) {
-    console.log('ERROR =======>', res)
     throw new Error('Failed to fetch data')
   }
 
