@@ -4,6 +4,21 @@ export interface EventDataToSend extends EventData {
   eventOwnerEmail: string
 }
 
+export interface EventDataReceived {
+  eventOwnerId: string
+  eventOwnerName: string
+  eventOwnerEmail: string
+  eventPrice: string
+  eventLink: string
+  type: 'booking' | 'event'
+  eventTitle: string
+  eventDescription: string
+  eventCategory: 'Travel' | 'Other'
+  eventLocation: string
+  eventDateAndTime: string
+  eventPhotos: string[]
+}
+
 export interface EventData {
   type: 'booking' | 'event'
   eventTitle: string
@@ -78,9 +93,13 @@ export interface UserData {
 export type ResponseError = string | null
 
 export interface LoginResponse {
-  message?: string
-  error?: {
+  message: string | null
+  error: {
     message: string
     name: string
-  }
+  } | null
+  userInfo: UserInfo | null
+}
+export interface MetaDataProps {
+  params: { id: string }
 }

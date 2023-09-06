@@ -32,8 +32,8 @@ const MONTHS: Array<string> = [
 ]
 
 export default function CardOnline(props: OnlineCardProps) {
-  const { dateTime, title, photo, users, link = '#' } = props
-  let [day, month, year] = dateTime[0].split('/')
+  const { dateTime, title, photo, link = '#' } = props
+  const [day, month, year] = dateTime[0].split('/')
   const time = dateTime[1]
 
   return (

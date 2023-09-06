@@ -31,7 +31,7 @@ const INSTRUCTIONS = {
 export default function Instructions() {
   return (
     <section className=" md:h-auto w-full py-8 lg:mx-0 md: overflow-x-auto  md:w-auto">
-      <div className="text-center overflow-hidden relative z-10 p-20 pb-10">
+      <div className="text-center  relative z-10 p-20 pb-10">
         <h2 className="text-left sm:text-center text-2xl sm:text-3xl font-semibold mb-2">
           {INSTRUCTIONS.header.title}
         </h2>

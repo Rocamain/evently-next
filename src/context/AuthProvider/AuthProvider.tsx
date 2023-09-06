@@ -6,21 +6,21 @@ import React, {
   ReactNode,
   useEffect,
 } from 'react'
-import { authenticate, removeCookies, loginUser } from '@/app/actions/actions'
-import { usePathname, useRouter } from 'next/navigation'
-import { LoginData, LoginResponse } from '@/lib/interfaces'
+import { authenticate, loginUser } from '@/app/actions/actions'
+import { LoginData, LoginResponse, UserInfo } from '@/lib/interfaces'
 
 // Define the user type
-
-type IsAuthenticated = boolean
 
 interface AuthContextType {
   login: (user: LoginData) => Promise<LoginResponse>
   logout: () => void
   isAuthenticated: boolean
-  isMounted: boolean
+  // isMounted: boolean
+  user: User
 }
-
+interface User {
+  userInfo: UserInfo | null
+}
 // Create the AuthContext
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
@@ -40,31 +40,20 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [isAuthenticated, setAuthenticated] = useState<IsAuthenticated>(false)
-  const [mount, setMount] = useState(false)
-
-  const pathname = usePathname()
-  const router = useRouter()
+  const [user, setUser] = useState<User>({ userInfo: null })
 
   useEffect(() => {
-    // Prefetch the home pag
-    router.prefetch('/')
-  }, [router])
-
-  // On mounted  check if the there cookies and authenticate the use
-  useEffect(() => {
-    setMount(false)
     const isLogged = async (): Promise<void> => {
-      const { verified } = await authenticate()
+      const { verified, userInfo } = await authenticate()
 
-      if (verified) {
-        setAuthenticated(true)
+      if (verified && userInfo) {
+        setUser({ userInfo })
       }
-      //  Force render
-      setMount(true)
     }
     isLogged()
-  }, [pathname, router])
+  }, [])
+
+  // On mounted  check if the there cookies and authenticate the use
 
   // Function to log in the user
   const login = async (userData: LoginData) => {
@@ -72,31 +61,39 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const response = await loginUser(userData)
 
       // Setting Authenticated
-      response?.error ? setAuthenticated(false) : setAuthenticated(true)
+      if (response.error) {
+        setUser({ userInfo: null })
+      } else {
+        setUser({ userInfo: response.userInfo })
+      }
 
-      return response
+      return {
+        message: 'Login successful',
+        error: null,
+        userInfo: null,
+      }
     } catch (error) {
       return {
+        message: null,
         error: {
           message: 'Oops something strange happened',
           name: 'Server error',
         },
+        userInfo: null,
       }
     }
   }
 
   // Function to log out the user
-  const logout = () => {
-    removeCookies()
-    setAuthenticated(false)
+  const logout = async () => {
+    setUser({ userInfo: null })
   }
 
-  // Provide the context values to children components
   const contextValue: AuthContextType = {
     login,
     logout,
-    isAuthenticated,
-    isMounted: mount,
+    isAuthenticated: Boolean(user.userInfo),
+    user,
   }
 
   return (

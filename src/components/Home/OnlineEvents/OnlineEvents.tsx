@@ -79,9 +79,8 @@ export default function OnlineEvents() {
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
       if (ref.current) {
-        console.log('resize')
         const boxWidth = ref.current.getBoundingClientRect().width
-        console.log(boxWidth)
+
         const calculatedCarouselWidth = ONLINE_EVENTS.length * CARD_WIDTH - 24
         const newCarouselWidthDiff = calculatedCarouselWidth - boxWidth
         setCarouselWidthDiff(newCarouselWidthDiff)
