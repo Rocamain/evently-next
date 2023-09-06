@@ -5,7 +5,7 @@ export default function Hero() {
   return (
     <div className="mt-5 mb-16 sm:mt-24">
       <div className="flex flex-col items-center sm:flex-row">
-        <div className="flex flex-col w-full lg:w-1/2 space-y-6 sm:mr-5 lg:mr-10 mb-6 sm:mb-0">
+        <div className="flex flex-col w-full lg:w-1/2 space-y-6 sm:mr-5 lg:mr-10 mb-12 sm:mb-0">
           <h1 className="text-3xl sm:text-5xl font-bold">
             The people platform—Where interests become friendships
           </h1>
@@ -16,8 +16,13 @@ export default function Hero() {
             Framework with AWS.
           </p>
           <div className="mt-7 flex  gap-4">
-            <LinkButton href="#">Join Evently</LinkButton>
-            <LinkButton href="#">Check my portfolio</LinkButton>
+            <LinkButton href="/join">Join Evently</LinkButton>
+            <LinkButton
+              target="_blank"
+              href="https://portfolio-javi-roca-git-main-rocamain.vercel.app/"
+            >
+              Check my portfolio
+            </LinkButton>
           </div>
         </div>
         <div>
