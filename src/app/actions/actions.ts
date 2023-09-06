@@ -1,17 +1,21 @@
 'use server'
 import axios from 'axios'
+import { revalidateTag } from 'next/cache'
+import { notFound } from 'next/navigation'
 import {
   setCookies,
   getCookiesToken,
   deleteCookies,
   userInfoFormatter,
-} from './utils/utils'
+  EventInfoFormatter,
+} from '../../lib/utils'
 import {
   LoginData,
   LoginResponse,
   AuthResponse,
   UserData,
   EventData,
+  EventDataReceived,
 } from '@/lib/interfaces'
 
 const URL = process.env.API_URL
@@ -36,7 +40,11 @@ export const registerUser = async (
         return data
       }
     }
-    return { error: { message: 'Server is down', name: 'Server error' } }
+    return {
+      message: null,
+      userInfo: null,
+      error: { message: 'Server is down', name: 'Server error' },
+    }
   }
 }
 
@@ -56,21 +64,30 @@ export const loginUser = async (
 
     // On Login success setCookies is called
     setCookies(AccessToken, RefreshToken, userInfo, ExpiresIn)
+    revalidateTag('tokenVerified')
 
-    return { message: data.message }
+    return { message: data.message, userInfo, error: null }
   } catch (error) {
     // On Login fail remove old cookies if they exist
-    deleteCookies()
 
     if (axios.isAxiosError<LoginResponse>(error)) {
-      const data = error.response?.data
+      const errorData = error.response?.data
 
-      if (data) {
-        return data
+      if (errorData) {
+        return {
+          message: null,
+          userInfo: null,
+          error: {
+            message: 'Something strange has happened',
+            name: 'Server error',
+          },
+        }
       }
     }
 
     return {
+      message: null,
+      userInfo: null,
       error: {
         message: 'Something strange has happened',
         name: 'Server error',
@@ -80,16 +97,9 @@ export const loginUser = async (
 }
 
 // Logout function
-export const logout = async () => {
+export const logoutUser = () => {
   deleteCookies()
-
-  const response = await fetch(`${URL}/auth/revalidate`, {
-    next: { tags: ['tokenVerified'] },
-  })
-
-  const { verified } = await response.json()
-
-  return verified
+  revalidateTag('tokenVerified')
 }
 
 // Authenticate function verifies access token
@@ -106,31 +116,17 @@ export const authenticate = async (): Promise<AuthResponse> => {
       },
     })
 
-    const { verified } = await response.json()
+    const body = await response.json()
 
     // PENDING IMPLEMENTATION FOR REFRESH TOKEN
 
-    return { verified, userInfo }
+    return { verified: body.verified, userInfo }
   }
 
   return { verified: false, userInfo: null }
 }
 
-// RemoveCookies function removes access token
-export const removeCookies = async () => {
-  deleteCookies()
-  try {
-    const response = await fetch(`${URL}/auth/revalidate`, {
-      next: { tags: ['tokenVerified'] },
-    })
-
-    const { verified } = await response.json()
-
-    return verified
-  } catch (error) {}
-}
-
-// CreateEvent function
+// Create Event function calls the DB with token to save an Event
 export const createEvent = async (eventData: FormData) => {
   const cookiesInfo = getCookiesToken()
   if (cookiesInfo) {
@@ -146,12 +142,46 @@ export const createEvent = async (eventData: FormData) => {
           Authorization: `Bearer ${authToken}`,
         },
       })
+
+      return 'created'
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.log(error)
+        return 'bad'
       }
     }
   }
 
   // PENDING IMPLEMENTATION RETURN TO LOGIN
+}
+
+export const getEventData = async (
+  id: string,
+): Promise<EventDataReceived | undefined> => {
+  const res = await fetch(`${process.env.DB_URL}/item/${id}`)
+
+  if (!res.ok) {
+    console.log('ERROR =======>', res)
+    throw new Error('Failed to fetch data')
+  }
+
+  const { data } = await res.json()
+  if (data && Object.keys(data).length) {
+    return data
+  }
+  // If not found redirect to not found page.
+
+  notFound()
+}
+
+// PENDING IMPLEMENTATION
+
+export const updateEvent = async (eventData: FormData) => {
+  const isSubmit = eventData.has('submit')
+  if (isSubmit) {
+    eventData.delete('submit')
+
+    const data = EventInfoFormatter(eventData)
+
+    console.log(data)
+  }
 }
