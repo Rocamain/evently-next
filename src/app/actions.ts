@@ -8,7 +8,7 @@ import {
   deleteCookies,
   userInfoFormatter,
   EventInfoFormatter,
-} from '../../lib/utils'
+} from '../lib/utils'
 import {
   LoginData,
   LoginResponse,
@@ -64,27 +64,24 @@ export const loginUser = async (
 
     // On Login success setCookies is called
     setCookies(AccessToken, RefreshToken, userInfo, ExpiresIn)
-    revalidateTag('tokenVerified')
+    // revalidateTag('tokenVerified')
 
     return { message: data.message, userInfo, error: null }
   } catch (error) {
     // On Login fail remove old cookies if they exist
 
     if (axios.isAxiosError<LoginResponse>(error)) {
-      const errorData = error.response?.data
+      const dataError = error.response?.data?.error
 
-      if (errorData) {
+      if (dataError) {
         return {
           message: null,
           userInfo: null,
-          error: {
-            message: 'Something strange has happened',
-            name: 'Server error',
-          },
+          error: dataError,
         }
       }
     }
-
+    console.log(error)
     return {
       message: null,
       userInfo: null,
@@ -137,11 +134,13 @@ export const createEvent = async (eventData: FormData) => {
 
     try {
       const { DB_URL } = process.env
-      await axios.post(`${DB_URL}/item`, eventData, {
+      console.log({ DB_URL })
+      const res = await axios.post(`${DB_URL}/item`, eventData, {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
       })
+      console.log(res)
 
       return 'created'
     } catch (error) {
@@ -175,12 +174,37 @@ export const getEventData = async (
 // PENDING IMPLEMENTATION
 
 export const updateEvent = async (eventData: FormData) => {
-  const isSubmit = eventData.has('submit')
-  if (isSubmit) {
-    eventData.delete('submit')
+  const isSubmit = eventData.has('eventId')
+  const cookiesInfo = getCookiesToken()
+  console.log({ eventData, isSubmit })
+  if (isSubmit && cookiesInfo) {
+    const { authToken } = cookiesInfo
 
-    const data = EventInfoFormatter(eventData)
+    const eventId = eventData.get('eventId')
+    eventData.delete('eventId')
 
-    console.log(data)
+    const dataToUpdated = EventInfoFormatter(eventData)
+    console.log({ dataToUpdated, eventId })
+    // if (Object.keys(dataToUpdated).length) {
+    //   eventData.set('data', JSON.stringify(dataToUpdated))
+
+    //   console.log({ dataToUpdated, eventId })
+    //   try {
+    //     const { DB_URL } = process.env
+    //     console.log({ DB_URL })
+    //     const res = await axios.post(`${DB_URL}/item/${eventId}`, eventData, {
+    //       headers: {
+    //         Authorization: `Bearer ${authToken}`,
+    //       },
+    //     })
+    //     console.log(res)
+
+    //     return 'created'
+    //   } catch (error) {
+    //     if (axios.isAxiosError(error)) {
+    //       return 'bad'
+    //     }
+    //   }
+    // }
   }
 }

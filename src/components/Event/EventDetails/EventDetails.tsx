@@ -23,17 +23,11 @@ export const EventDetails: React.FC<EventDetailsProps> = ({
   const handleEdit = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ): void => {
-    // const isEdit = e.currentTarget.innerText === '...Edit'
-
-    // if (isEdit && ref.current) {
-    //   setContent(ref.current?.innerText)
-    // }
     setEdit((prev) => !prev)
   }
 
   useEffect(() => {
     if (inputRef.current && !edit) {
-      console.log('focus')
       inputRef.current.focus()
     }
   }, [edit, inputRef])
@@ -46,14 +40,13 @@ export const EventDetails: React.FC<EventDetailsProps> = ({
     if (file) {
       const imageUrl = URL.createObjectURL(file)
       setContent(imageUrl)
-      console.log('Setting content url')
     } else {
       setContent('/images/austin-distel-rxpThOwuVgE-unsplash.jpg')
     }
   }
 
   const photoUrl = content || '/images/austin-distel-rxpThOwuVgE-unsplash.jpg'
-  console.log({ ID: eventOwnerId, SUB: user.userInfo?.sub })
+
   return (
     <div className="flex flex-col  flex-grow justify-center ">
       {edit ? (
