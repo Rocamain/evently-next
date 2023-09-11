@@ -5,6 +5,7 @@ export interface EventDataToSend extends EventData {
 }
 
 export interface EventDataReceived {
+  eventId: string
   eventOwnerId: string
   eventOwnerName: string
   eventOwnerEmail: string
