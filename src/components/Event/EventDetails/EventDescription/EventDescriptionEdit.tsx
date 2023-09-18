@@ -88,7 +88,7 @@ export const EventDescriptionEdit: React.FC<EventDescriptionEditProps> = ({
   }
 
   return (
-    <div className="py-5 relative w-[95%]">
+    <div className="mx-4 py-5 relative">
       <div className="flex gap-5 mb-5">
         <h4 className="text-xl font-bold ">Details</h4>
         <button

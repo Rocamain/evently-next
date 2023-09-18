@@ -1,20 +1,21 @@
-import { LinkButton } from '@/components/Shared/LinkButton/LinkButton'
 import {
   BookingBar,
   EventHeader,
   EventTitle,
   EventContent,
   EventDetails,
+  EventInfo,
 } from '@/components/Event/'
-import { TimeIcon, LocationIcon, WebsiteLinkIcon } from '@/components/Icons'
-import { MetaDataProps } from '@/lib/interfaces'
+import { Attendee, Item, MetaDataProps } from '@/lib/interfaces'
 import { getCookiesToken, getStringDate } from '@/lib/utils'
-import { getEventData, updateEvent } from '@/app/actions/actions'
+import { getEventData, updateEvent } from '@/app/actions'
+import EventAttendees from '@/components/Event/EventAttendees/EventAttendees'
 
 export async function generateMetadata({ params }: MetaDataProps) {
   const data = await getEventData(params.id)
-  if (data) {
-    const { eventTitle } = data
+
+  if (data?.items.length) {
+    const { eventTitle } = data.items[0] as Item
 
     return { title: eventTitle || 'Not found' }
   }
@@ -22,9 +23,12 @@ export async function generateMetadata({ params }: MetaDataProps) {
 
 export default async function events({ params }: { params: { id: string } }) {
   const userIdCookie = getCookiesToken()?.userInfo?.sub
-  const event = await getEventData(params.id)
+  const eventInfo = await getEventData(params.id)
 
-  if (event) {
+  if (eventInfo) {
+    const event = eventInfo.items.filter(
+      (item) => item.type === 'event',
+    )[0] as Item
     const isEventOwner = event.eventOwnerId === userIdCookie
 
     const {
@@ -34,68 +38,62 @@ export default async function events({ params }: { params: { id: string } }) {
       eventDateAndTime,
       eventLocation,
       eventPrice,
-      eventOwnerId,
       eventDescription,
       eventPhotos,
-    } = event
+    } = event as Item
+
+    const bookings = eventInfo.items.filter(
+      ({ type }) => type === 'booking',
+    ) as Array<Attendee>
+    const count = Number(eventInfo.count)
 
     const time = getStringDate(new Date(eventDateAndTime))
-
     return (
       <form action={updateEvent}>
-        <EventHeader eventOwnerName={eventOwnerName}>
-          <EventTitle eventTitle={eventTitle} isOwner={isEventOwner} />
-        </EventHeader>
-
-        <EventContent>
-          <EventDetails
-            eventOwnerId={eventOwnerId}
-            eventPhotos={eventPhotos}
-            eventDescription={eventDescription}
-          />
-          <div className="w-100 lg:w-90  sm:ml-16 sm:mt-10 lg:ml-28 lg:mt-10 sm:min-w-[14rem] md:min-w-[20rem]">
-            <div className="pb-6 pt-7 sm:px-4 sm:bg-white sm:rounded-t-2xl">
-              <div className="flex">
-                <div>
-                  <TimeIcon className="text-gray-500" />
+        <div className="bg-white border-b border-shadowColor">
+          <div className="px-4 lg-px-0 mx-auto sm:px-10 sm:max-w-3xl md:max-w-4xl lg:max-w-5xl xl:max-w-6xl">
+            <EventHeader eventOwnerName={eventOwnerName}>
+              <EventTitle eventTitle={eventTitle} isOwner={isEventOwner} />
+            </EventHeader>
+            {/* {isEventOwner && (
+          <button type="submit" name="eventId" value={eventId}>
+            Modify
+          </button>
+        )} */}
+          </div>
+        </div>
+        <div className="bg-gray-100/80">
+          <div className="px-4 lg-px-0 mx-auto sm:px-10 sm:max-w-3xl md:max-w-4xl lg:max-w-5xl xl:max-w-6xl">
+            <div className="">
+              <EventContent>
+                <div className="flex flex-col-reverse mt-5 lg:pt-10 lg:flex-row lg:justify-between">
+                  <div className="flex-grow lg:max-w-2xl">
+                    <EventDetails
+                      eventPhotos={eventPhotos}
+                      eventDescription={eventDescription}
+                      isOwner={isEventOwner}
+                    />
+                    <EventAttendees
+                      count={count}
+                      event={event}
+                      attendees={bookings}
+                    />
+                  </div>
+                  <EventInfo
+                    time={time}
+                    eventLink={eventLink}
+                    eventLocation={eventLocation}
+                  />
                 </div>
-                <div className="pl-4 md:pl-4.5 lg:pl-5">
-                  <time dateTime={time} title={time}>
-                    {time}
-                  </time>
-                </div>
-              </div>
-              <div className="flex mt-2">
-                <div>
-                  <LocationIcon className="text-gray-500" />
-                </div>
-                <div className="pl-1  lg:pl-2">
-                  <LinkButton
-                    tealText
-                    target="_blank"
-                    href={eventLink}
-                    transparent
-                  >
-                    {eventLocation}
-                  </LinkButton>
-                </div>
-              </div>
-              <div className="flex mt-2">
-                <WebsiteLinkIcon className="text-gray-500" />
-                <div className="pl-1  lg:pl-2">
-                  <LinkButton tealText target="_blank" href="#" transparent>
-                    link
-                  </LinkButton>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-center h-[230px] lg:h-[230px] bg-red-400">
-              <h1>Map</h1>
+              </EventContent>
+              <BookingBar
+                eventLocation={eventTitle}
+                time={time}
+                price={Number(eventPrice)}
+              />
             </div>
           </div>
-        </EventContent>
-        <BookingBar title={eventTitle} time={time} price={Number(eventPrice)} />
+        </div>
       </form>
     )
   }
