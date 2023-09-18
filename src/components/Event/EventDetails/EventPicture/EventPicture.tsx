@@ -42,65 +42,69 @@ export const EventPicture: React.FC<EventPictureProps> = ({
     }
   }
 
-  return !isOwner ? (
-    // Display the image for non-owners
-    <Image
-      alt={edit ? 'event picture' : 'new uploaded picture'}
-      width={220}
-      height={140}
-      className="w-full"
-      src={photoUrl}
-    />
-  ) : edit ? (
-    // Display the image and "Change Photo" label in edit mode
-    <div className="flex-grow relative">
-      <label
-        htmlFor="fileInput"
-        className="cursor-pointer relative block w-full h-full"
-      >
-        <div className="group">
-          <Image
-            alt={edit ? 'event picture' : 'new uploaded picture'}
-            width={220}
-            height={140}
-            className="w-full hover:filter hover:grayscale"
-            src={photoUrl}
-            onClick={handleEditToggle}
-          />
-          <div className="hidden group-hover:block absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer text-md p-2 px-3 whitespace-nowrap bg-teal-600 text-white font-medium rounded-md">
-            Change Photo
-          </div>
-        </div>
-        <input
-          id="fileInput"
-          ref={inputRef}
-          type="file"
-          accept="image/*"
-          name="files"
-          onChange={handleChange}
-          required
-          className="opacity-0"
-        />
-      </label>
-    </div>
-  ) : (
-    // Display the image without the "Change Photo" label
-    <div className="flex-grow relative">
-      <div className="group">
+  return (
+    <div className="lg:max-w-2xl flex-grow">
+      {!isOwner ? (
+        // Display the image for non-owners
+
         <Image
-          alt="event picture"
+          alt={edit ? 'event picture' : 'new uploaded picture'}
           width={220}
           height={140}
-          className="w-full hover:filter hover:grayscale"
+          className="w-full"
           src={photoUrl}
-          onClick={handleEditToggle}
         />
-        <div className="hidden group-hover:block absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer text-md p-2 px-3 whitespace-nowrap bg-teal-600 text-white font-medium rounded-md">
-          Change Photo
+      ) : edit ? (
+        // Display the image and "Change Photo" label in edit mode
+        <div className="relative flex-grow">
+          <label
+            htmlFor="fileInput"
+            className="cursor-pointer relative block w-full h-full"
+          >
+            <div className="group">
+              <Image
+                alt={edit ? 'event picture' : 'new uploaded picture'}
+                width={220}
+                height={140}
+                className="w-full hover:filter hover:grayscale"
+                src={photoUrl}
+                onClick={handleEditToggle}
+              />
+              <div className="hidden group-hover:block absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer text-md p-2 px-3 whitespace-nowrap bg-teal-600 text-white font-medium rounded-md">
+                Change Photo
+              </div>
+            </div>
+            <input
+              id="fileInput"
+              ref={inputRef}
+              type="file"
+              accept="image/*"
+              name="files"
+              onChange={handleChange}
+              required
+              className="opacity-0"
+            />
+          </label>
         </div>
-      </div>
+      ) : (
+        // Display the image without the "Change Photo" label
+        <div className="flex-grow relative">
+          <div className="group">
+            <Image
+              alt="event picture"
+              width={220}
+              height={140}
+              className="w-full hover:filter hover:grayscale"
+              src={photoUrl}
+              onClick={handleEditToggle}
+            />
+            <div className="hidden group-hover:block absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer text-md p-2 px-3 whitespace-nowrap bg-teal-600 text-white font-medium rounded-md">
+              Change Photo
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
-
 export default EventPicture

@@ -3,7 +3,7 @@ import { headers } from 'next/headers'
 import React from 'react'
 interface BookingBarProps {
   children?: React.ReactNode
-  title: string
+  eventLocation: string
   time: string
   price: number
 }
@@ -15,26 +15,24 @@ const getPath = () => {
 }
 
 export const BookingBar: React.FC<BookingBarProps> = ({
-  title,
+  eventLocation,
   time,
   price,
 }) => {
   const path = getPath()
   return (
-    <div className="sticky bottom-1 bg-white w-full py-5  px-5 xl:px-0">
-      <div className="flex justify-between text-gray-500 sm:max-w-4xl  xl:max-w-5xl mx-auto">
+    <div className="sticky bottom-0 bg-white w-full py-5">
+      <div className="flex justify-between text-gray-500 mx-4">
         <div className="hidden sm:flex flex-col justify-center">
           <div>
             <div className="flex flex-col uppercase leading-5 tracking-tight ">
-              <time className="" dateTime={time} title={time}>
-                {time}
-              </time>
+              <p className="font-semibold">{eventLocation}</p>
             </div>
           </div>
           <div>
-            <p className="font-semibold">
-              {time} - {title}
-            </p>
+            <time className="" dateTime={time} title={time}>
+              {time}
+            </time>
           </div>
         </div>
         <div className="w-full sm:w-auto">
@@ -48,7 +46,7 @@ export const BookingBar: React.FC<BookingBarProps> = ({
             </div>
             <div className="flex items-center space-x-3 sm:space-x-5 ml-5">
               <div className="flex items-center">
-                <LinkButton href={`${path}?showDialog=y`}>Join now</LinkButton>
+                <LinkButton href={`${path}?showDialog=y`}>Book</LinkButton>
               </div>
             </div>
           </div>

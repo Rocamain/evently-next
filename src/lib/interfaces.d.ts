@@ -4,7 +4,15 @@ export interface EventDataToSend extends EventData {
   eventOwnerEmail: string
 }
 
-export interface EventDataReceived {
+interface Attendee {
+  type: 'booking'
+  bookingId: string
+  userId: string
+  userName: string
+  userEmail: string
+}
+
+interface Item {
   eventId: string
   eventOwnerId: string
   eventOwnerName: string
@@ -18,6 +26,11 @@ export interface EventDataReceived {
   eventLocation: string
   eventDateAndTime: string
   eventPhotos: string[]
+}
+
+export interface EventDataReceived {
+  items: Array<Item | Attendee>
+  count: number | string
 }
 
 export interface EventData {
