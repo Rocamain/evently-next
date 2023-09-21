@@ -1,15 +1,15 @@
 'use client'
 import React from 'react'
-import { logoutUser } from '@/app/actions/actions'
+import { logoutUser } from '@/app/actions'
 import { useAuth } from '@/context/AuthProvider/AuthProvider'
 
 export default function LogoutButton() {
-  const { logout } = useAuth()
+  const auth = useAuth()
 
   return (
-    <li className="">
+    <li>
       <form action={logoutUser}>
-        <button onClick={logout} type="submit">
+        <button onClick={auth.logout} type="submit">
           Logout
         </button>
       </form>
