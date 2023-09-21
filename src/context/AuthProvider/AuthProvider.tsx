@@ -1,33 +1,27 @@
 'use client'
-import React, {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-  useEffect,
-} from 'react'
-import { authenticate, loginUser } from '@/app/actions/actions'
+import React, { createContext, useContext, useState, useEffect } from 'react'
+import { authenticate, loginUser } from '@/app/actions'
 import { LoginData, LoginResponse, UserInfo } from '@/lib/interfaces'
 
 // Define the user type
+interface User {
+  userInfo: UserInfo | null
+}
 
+// Define the context type
 interface AuthContextType {
   login: (user: LoginData) => Promise<LoginResponse>
   logout: () => void
   isAuthenticated: boolean
-  // isMounted: boolean
   user: User
 }
-interface User {
-  userInfo: UserInfo | null
-}
+
 // Create the AuthContext
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 // Create a custom hook to access the AuthContext
 export function useAuth() {
   const context = useContext(AuthContext)
-
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider')
   }
@@ -36,7 +30,7 @@ export function useAuth() {
 
 // Create the AuthProvider component
 interface AuthProviderProps {
-  children: ReactNode
+  children: React.ReactNode
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
@@ -44,39 +38,45 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     const isLogged = async (): Promise<void> => {
-      const { verified, userInfo } = await authenticate()
+      try {
+        const { verified, userInfo } = await authenticate()
 
-      if (verified && userInfo) {
-        setUser({ userInfo })
+        if (verified && userInfo) {
+          setUser({ userInfo })
+        }
+      } catch (error) {
+        console.error('Authentication error:', error)
       }
     }
     isLogged()
   }, [])
 
-  // On mounted  check if the there cookies and authenticate the use
-
   // Function to log in the user
-  const login = async (userData: LoginData) => {
+  const login = async (userData: LoginData): Promise<LoginResponse> => {
     try {
       const response = await loginUser(userData)
 
-      // Setting Authenticated
       if (response.error) {
         setUser({ userInfo: null })
+        return {
+          message: null,
+          error: response.error,
+          userInfo: null,
+        }
       } else {
         setUser({ userInfo: response.userInfo })
-      }
-
-      return {
-        message: 'Login successful',
-        error: null,
-        userInfo: null,
+        return {
+          message: 'Login successful',
+          error: null,
+          userInfo: null,
+        }
       }
     } catch (error) {
+      console.error('Login error:', error)
       return {
         message: null,
         error: {
-          message: 'Oops something strange happened',
+          message: 'Oops, something strange happened',
           name: 'Server error',
         },
         userInfo: null,
@@ -85,7 +85,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   // Function to log out the user
-  const logout = async () => {
+  const logout = () => {
     setUser({ userInfo: null })
   }
 
