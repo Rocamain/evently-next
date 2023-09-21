@@ -3,7 +3,7 @@ import Logo from './Logo'
 import { LinkButton } from '@/components/Shared/LinkButton/LinkButton'
 import SearchBar from '@/components/Shared/SearchBar/SearchBar'
 import LogoutButton from '@/components/Shared/NavBar/LogoutButton'
-import { authenticate } from '@/app/actions/actions'
+import { authenticate } from '@/app/actions'
 
 interface NavbarProps {
   path: string
@@ -39,14 +39,18 @@ export default async function Navbar({ path }: NavbarProps) {
               <LogoutButton />
             ) : (
               <>
-                <li>
-                  <LinkButton href="/login" transparent={true}>
-                    Log in
-                  </LinkButton>
-                </li>
-                <li>
-                  <LinkButton href="/register">Register</LinkButton>
-                </li>
+                {path !== '/login' && (
+                  <li>
+                    <LinkButton href="/login" transparent={true}>
+                      Log in
+                    </LinkButton>
+                  </li>
+                )}
+                {path !== '/register' && (
+                  <li>
+                    <LinkButton href="/register">Register</LinkButton>
+                  </li>
+                )}
               </>
             )}
           </ul>
