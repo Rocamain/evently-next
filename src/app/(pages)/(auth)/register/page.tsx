@@ -1,9 +1,12 @@
 'use client'
 import { useState, FormEvent, FC } from 'react'
-import { registerUser } from '@/app/actions/actions'
+import { registerUser } from '@/app/actions'
 import { CustomInput } from '@/components/Shared/CustomInput/CustomInput'
 import FormTemplate from '@/components/Shared/FormTemplate/FormTemplate'
 import { ResponseError, UserData } from '@/lib/interfaces'
+interface RegisterPageProps {
+  modal: boolean
+}
 
 const INITIAL_USER_STATE = {
   name: '',
@@ -13,7 +16,7 @@ const INITIAL_USER_STATE = {
 }
 const INITIAL_ERROR = null
 
-const RegisterPage: FC = () => {
+const RegisterPage: FC<RegisterPageProps> = ({ modal = false }) => {
   const [userData, setUser] = useState<UserData>(INITIAL_USER_STATE)
   const [responseError, setResponseError] =
     useState<ResponseError>(INITIAL_ERROR)
@@ -45,7 +48,11 @@ const RegisterPage: FC = () => {
   const canSave = [...Object.values(userData)].every(Boolean)
 
   return (
-    <FormTemplate handleSubmit={handleSubmit} title="Join to Evently">
+    <FormTemplate
+      modal={modal}
+      handleSubmit={handleSubmit}
+      title="Join to Evently"
+    >
       <CustomInput
         type="text"
         label="Name"
