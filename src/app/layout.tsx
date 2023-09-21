@@ -18,32 +18,33 @@ const getPath = () => {
   return pathname
 }
 
-export default function RootLayout({
-  children,
-}: {
+export default function RootLayout(props: {
   children: React.ReactNode
+  modal: React.ReactNode
 }) {
   const pathname = getPath()
+  const isMain = pathname === '/'
 
   return (
     <html lang="en">
       <body className={inter.className}>
-        <main
-          id={pathname === '/' ? 'background-blob' : undefined}
-          className="relative -z-1 min-h-full"
-        >
-          <AuthProvider>
-            <Navbar path={pathname} />
-            {children}
-          </AuthProvider>
-          <footer
-            style={{
-              height: '25vh',
-              backgroundColor: 'black',
-              color: 'white',
-            }}
-          ></footer>
-        </main>
+        <AuthProvider>
+          <Navbar path={pathname} />
+          <main
+            id={isMain ? 'background-blob' : undefined}
+            className="min-h-full"
+          >
+            {props.children}
+            {props.modal}
+          </main>
+        </AuthProvider>
+        <footer
+          style={{
+            height: '25vh',
+            backgroundColor: 'black',
+            color: 'white',
+          }}
+        ></footer>
       </body>
     </html>
   )

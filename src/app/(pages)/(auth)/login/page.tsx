@@ -5,12 +5,16 @@ import { LoginData, LoginError } from '@/lib/interfaces'
 import FormTemplate from '@/components/Shared/FormTemplate/FormTemplate'
 import { ContainerInput } from '@/components/Shared/CustomInput/CustomInput'
 
+interface LoginPageProps {
+  modal: boolean
+}
+
 const INITIAL_USER_STATE = {
   email: '',
   password: '',
 }
 
-const LoginPage: FC = () => {
+const LoginPage: FC<LoginPageProps> = ({ modal = false }) => {
   const { login } = useAuth()
   const [loginData, setLoginData] = useState<LoginData>(INITIAL_USER_STATE)
   const [loginError, setLoginError] = useState<LoginError>(null)
@@ -30,7 +34,7 @@ const LoginPage: FC = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
+    setLoginError(null)
     const { error } = await login(loginData)
 
     if (error) {
@@ -42,7 +46,11 @@ const LoginPage: FC = () => {
   const canSave = [...Object.values(loginData)].every(Boolean)
 
   return (
-    <FormTemplate title="Evently Login!" handleSubmit={handleSubmit}>
+    <FormTemplate
+      modal={modal}
+      title="Evently Login!"
+      handleSubmit={handleSubmit}
+    >
       <ContainerInput label="Username">
         <input
           id="Username"
