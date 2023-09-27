@@ -1,7 +1,7 @@
 'use client'
 import { useState, ChangeEvent, FormEvent, FC } from 'react'
-import { useAuth } from '@/context/AuthProvider/AuthProvider'
-import { LoginData, LoginError } from '@/lib/interfaces'
+import { useAuth } from '@/hooks/AuthProvider/AuthProvider'
+import { LoginData, ResponseError } from '@/lib/interfaces'
 import FormTemplate from '@/components/Shared/FormTemplate/FormTemplate'
 import { ContainerInput } from '@/components/Shared/CustomInput/CustomInput'
 
@@ -17,7 +17,9 @@ const INITIAL_USER_STATE = {
 const LoginPage: FC<LoginPageProps> = ({ modal = false }) => {
   const { login } = useAuth()
   const [loginData, setLoginData] = useState<LoginData>(INITIAL_USER_STATE)
-  const [loginError, setLoginError] = useState<LoginError>(null)
+  const [loginError, setLoginError] = useState<ResponseError>(null)
+  const [loading, setLoading] = useState<boolean>(false)
+  const [succeed, setSucceed] = useState<boolean>(false)
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -35,19 +37,23 @@ const LoginPage: FC<LoginPageProps> = ({ modal = false }) => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setLoginError(null)
+    setLoading(true)
     const { error } = await login(loginData)
 
     if (error) {
       setLoginError(error.message)
     } else {
-      // PENDING IMPLEMENTATION FOR SUCCESS
+      setSucceed(true)
     }
+    setLoading(false)
   }
   const canSave = [...Object.values(loginData)].every(Boolean)
 
   return (
     <FormTemplate
       modal={modal}
+      loading={loading}
+      succeed={succeed}
       title="Evently Login!"
       handleSubmit={handleSubmit}
     >

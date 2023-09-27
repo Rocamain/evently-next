@@ -4,6 +4,8 @@ import { registerUser } from '@/app/actions'
 import { CustomInput } from '@/components/Shared/CustomInput/CustomInput'
 import FormTemplate from '@/components/Shared/FormTemplate/FormTemplate'
 import { ResponseError, UserData } from '@/lib/interfaces'
+import { useRouter } from 'next/navigation'
+
 interface RegisterPageProps {
   modal: boolean
 }
@@ -13,36 +15,64 @@ const INITIAL_USER_STATE = {
   surname: '',
   email: '',
   password: '',
+  profilePicture: null,
 }
 const INITIAL_ERROR = null
 
 const RegisterPage: FC<RegisterPageProps> = ({ modal = false }) => {
   const [userData, setUser] = useState<UserData>(INITIAL_USER_STATE)
+  const [file, setFile] = useState<null | string>(null)
   const [responseError, setResponseError] =
     useState<ResponseError>(INITIAL_ERROR)
+  const [loading, setLoading] = useState<boolean>(false)
+  const [succeed, setSucceed] = useState<boolean>(false)
+  const router = useRouter()
 
-  const handleInput = (inputData: string, inputValue: string) => {
+  const handleInput = (inputData: string, inputValue: string | File | null) => {
+    if (inputData === 'profilePicture') {
+      if (inputValue) {
+        const imageUrl = URL.createObjectURL(inputValue as File)
+        setFile(imageUrl)
+      } else {
+        setFile(null)
+      }
+    }
+
     setUser((prevData) => ({
       ...prevData,
       [inputData]: inputValue,
     }))
   }
+
   const handleResetError = () => {
     setResponseError(null)
   }
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setLoading(true)
 
-    const response = await registerUser(userData)
+    const formData = new FormData()
+    formData.append('name', userData.name)
+    formData.append('surname', userData.surname)
+    formData.append('email', userData.email)
+    formData.append('password', userData.password)
+    formData.append('profilePicture', userData.profilePicture as Blob)
+
+    const response = await registerUser(formData)
 
     if (response.error) {
       setResponseError(response.error.message)
+      setSucceed(true)
     }
-    if (response.message === 'User created') {
-      // PENDING IMPLEMENTATION FOR SUCCESS
-      console.log('Created')
+    if (response.msg === 'User created') {
+      setSucceed(true)
+      setTimeout(() => {
+        router.replace('/login')
+      }, 500)
     }
+
+    setLoading(false)
   }
 
   const canSave = [...Object.values(userData)].every(Boolean)
@@ -51,7 +81,10 @@ const RegisterPage: FC<RegisterPageProps> = ({ modal = false }) => {
     <FormTemplate
       modal={modal}
       handleSubmit={handleSubmit}
+      loading={loading}
       title="Join to Evently"
+      profilePicture={file}
+      succeed={succeed}
     >
       <CustomInput
         type="text"
@@ -59,14 +92,16 @@ const RegisterPage: FC<RegisterPageProps> = ({ modal = false }) => {
         placeholder="Name"
         pattern="^(?=(?:[^A-Za-z]*[A-Za-z]){3})[^0-9]*$"
         autoFocus
+        inputData={userData.name}
         handleInput={handleInput}
         handleResetError={handleResetError}
       />
       <CustomInput
         type="text"
         label="Surname"
-        placeholder="surname"
+        placeholder="Surname"
         pattern="^(?=(?:[^A-Za-z]*[A-Za-z]){3})[^0-9]*$"
+        inputData={userData.surname}
         handleInput={handleInput}
         handleResetError={handleResetError}
       />
@@ -74,7 +109,8 @@ const RegisterPage: FC<RegisterPageProps> = ({ modal = false }) => {
         type="email"
         label="Email"
         placeholder="yourname@yoursite.com"
-        pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+        pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
+        inputData={userData.email}
         handleInput={handleInput}
         handleResetError={handleResetError}
       />
@@ -83,8 +119,18 @@ const RegisterPage: FC<RegisterPageProps> = ({ modal = false }) => {
         label="Password"
         placeholder="Type your password"
         pattern="^(?=.*\d).{8,}$"
+        inputData={userData.password}
         handleInput={handleInput}
         handleResetError={handleResetError}
+      />
+
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(e) => {
+          const selectedFile = e.target.files && (e.target.files[0] as File)
+          handleInput('profilePicture', selectedFile)
+        }}
       />
 
       {responseError && (
@@ -94,7 +140,9 @@ const RegisterPage: FC<RegisterPageProps> = ({ modal = false }) => {
       )}
 
       <button
-        className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-700 font-semibold"
+        className={`w-full p-2 ${
+          !canSave ? 'bg-red-300' : 'bg-red-500'
+        } text-white rounded hover:bg-red-300 font-semibold`}
         type="submit"
         disabled={!canSave}
       >

@@ -43,6 +43,7 @@ export interface EventData {
   eventTime: string
   eventPrice: string
   eventLink: string
+  eventPhotos: string[]
 }
 
 interface UserInfo {
@@ -100,6 +101,7 @@ export interface CreateUserResponse {
 export interface UserData {
   name: string
   surname: string
+  profilePicture?: File | null
   email: string
   password: string
 }
@@ -107,12 +109,14 @@ export interface UserData {
 export type ResponseError = string | null
 
 export interface LoginResponse {
-  message: string | null
+  msg: string | null
   error: {
     message: string
     name: string
   } | null
   userInfo: UserInfo | null
+  profilePicture?: string | null
+  picture?: string | null
 }
 export interface MetaDataProps {
   params: { id: string }
