@@ -14,7 +14,6 @@ import {
   LoginData,
   LoginResponse,
   AuthResponse,
-  UserData,
   EventData,
   EventDataReceived,
 } from '@/lib/interfaces'
@@ -92,6 +91,13 @@ export const loginUser = async (
     }
   }
 }
+export const getPath = () => {
+  const headersList = headers()
+
+  const pathname = headersList.get('x-url') as string
+
+  return pathname
+}
 
 // Logout function
 export const logoutUser = () => {
@@ -99,7 +105,7 @@ export const logoutUser = () => {
   revalidateTag('tokenVerified')
 
   const headersList = headers()
-  const pathname = headersList.get('x-invoke-path') as string
+  const pathname = headersList.get('x-url') as string
 
   if (pathname !== '/') {
     redirect('/')
@@ -146,7 +152,6 @@ export const createEvent = async (eventData: FormData) => {
           Authorization: `Bearer ${authToken}`,
         },
       })
-      console.log(res.data)
 
       return 'created'
     } catch (error) {
@@ -162,19 +167,14 @@ export const createEvent = async (eventData: FormData) => {
 export const getEventData = async (
   id: string,
 ): Promise<EventDataReceived | undefined> => {
-  const res = await fetch(`${process.env.DB_URL}/item/${id}`)
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch data')
+  const response = await fetch(`${process.env.DB_URL}/item/${id}`)
+  const body = await response.json()
+  if (!response.ok) {
+    notFound()
   }
+  return body.data
 
-  const { data } = await res.json()
-  if (data && Object.keys(data).length) {
-    return data
-  }
   // If not found redirect to not found page.
-
-  notFound()
 }
 
 // PENDING IMPLEMENTATION
