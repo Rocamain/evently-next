@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { NextResponse, NextRequest } from 'next/server'
-import { UserData, LoginResponse } from '@/lib/interfaces'
+import { LoginResponse } from '@/lib/interfaces'
 
 // Create the Register Api point to call the DB for Auth
 export async function POST(request: NextRequest) {
