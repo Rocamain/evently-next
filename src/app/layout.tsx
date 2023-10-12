@@ -1,21 +1,14 @@
 import './globals.css'
 import React from 'react'
-import { headers } from 'next/headers'
 import { Inter } from 'next/font/google'
 import Navbar from '@/components/Shared/NavBar/Navbar'
 import { AuthProvider } from '@/hooks/AuthProvider/AuthProvider'
-
+import { getPath } from '@/app/actions'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
   title: 'Evently the app for events',
   description: 'Create and book events',
-}
-
-const getPath = () => {
-  const headersList = headers()
-  const pathname = headersList.get('x-invoke-path') as string
-  return pathname
 }
 
 export default function RootLayout(props: {

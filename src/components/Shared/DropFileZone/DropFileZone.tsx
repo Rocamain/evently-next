@@ -1,7 +1,8 @@
 import Image from 'next/image'
 import React, { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { Avatar } from '@/components/Icons'
+import { Upload } from '@/components/Icons'
+
 const DropFileZone = () => {
   const [preview, setPreview] = useState<string | ArrayBuffer | null>(null)
   const onDrop = useCallback((acceptedFiles: Array<File>) => {
@@ -19,7 +20,7 @@ const DropFileZone = () => {
     <div>
       {preview && <p className="mb-5"></p>}
       <div {...getRootProps()}>
-        <input {...getInputProps()} />
+        <input type="file" accept="image/*" {...getInputProps()} />
         <div className="w-[74px] h-[74px] rounded-full flex items-center bg-red-500 border-gray-300 border-2 text-white hover:bg-red-300 overflow-hidden">
           {isDragActive ? (
             'Adding picture'
@@ -32,7 +33,7 @@ const DropFileZone = () => {
               height="60"
             />
           ) : (
-            <Avatar />
+            <Upload />
           )}
         </div>
       </div>

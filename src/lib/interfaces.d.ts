@@ -2,14 +2,16 @@ export interface EventDataToSend extends EventData {
   eventOwnerId: string
   eventOwnerName: string
   eventOwnerEmail: string
+  eventOwnerPicture: string
 }
 
 interface Attendee {
-  type: 'booking'
-  bookingId: string
+  bookingId?: string
   userId: string
   userName: string
   userEmail: string
+  userPicture: string
+  isHost?: boolean
 }
 
 interface Item {
@@ -26,6 +28,7 @@ interface Item {
   eventLocation: string
   eventDateAndTime: string
   eventPhotos: string[]
+  eventOwnerPicture: string
 }
 
 export interface EventDataReceived {
@@ -52,6 +55,7 @@ interface UserInfo {
   family_name: string
   name: string
   sub: string
+  picture: string
 }
 export type AuthResponse = {
   verified: boolean
