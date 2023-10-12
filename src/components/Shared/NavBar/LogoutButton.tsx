@@ -7,17 +7,15 @@ export default function LogoutButton() {
   const auth = useAuth()
 
   return (
-    <li>
-      <form action={logoutUser}>
-        <button
-          className="text-lg
+    <form action={logoutUser}>
+      <button
+        className="text-lg
       p-2 px-3 hover:text-teal-500 font-medium whitespace-nowrap"
-          onClick={auth.logout}
-          type="submit"
-        >
-          Logout
-        </button>
-      </form>
-    </li>
+        onClick={auth.logout}
+        type="submit"
+      >
+        Logout
+      </button>
+    </form>
   )
 }

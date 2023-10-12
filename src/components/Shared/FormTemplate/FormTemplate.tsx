@@ -1,7 +1,6 @@
 'use client'
 import React, { FC, FormEvent } from 'react'
 import ProfilePicture from '../ProfilePicture/ProfilePicture'
-import { revalidateAuth } from '@/app/actions'
 
 interface FormTemplateProps {
   title: string
@@ -18,7 +17,6 @@ const FormTemplate: FC<FormTemplateProps> = ({
   profilePicture,
   modal,
   loading,
-  succeed,
   handleSubmit,
   children,
 }) => {
@@ -35,13 +33,11 @@ const FormTemplate: FC<FormTemplateProps> = ({
             onSubmit={handleSubmit}
             autoComplete="off"
           >
-            <div className="flex items-end justify-between">
-              <h1 className="text-2xl font-semibold">{title}</h1>
-              <ProfilePicture
-                succeed={succeed}
-                loading={loading}
-                picture={profilePicture}
-              />
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-2xl font-semibold">{title}</h1>
+              </div>
+              <ProfilePicture loading={loading} picture={profilePicture} />
             </div>
             <div className="w-full flex flex-col space-y-6 mb-4 mt-8">
               {children}

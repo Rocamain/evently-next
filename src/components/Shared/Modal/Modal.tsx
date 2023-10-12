@@ -49,6 +49,12 @@ export default function Modal({ children }: { children: React.ReactNode }) {
   }, [isAuthenticated, onDismiss, router])
 
   useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = 'auto'
+    }
+  }, [])
+  useEffect(() => {
     document.addEventListener('keydown', onKeyDown)
     return () => document.removeEventListener('keydown', onKeyDown)
   }, [onKeyDown])
@@ -60,7 +66,7 @@ export default function Modal({ children }: { children: React.ReactNode }) {
   return (
     <div
       ref={overlay}
-      className="fixed z-10 left-0 right-0 top-0 bottom-0 mx-auto bg-gray-600/50"
+      className="absolute z-10 left-0 right-0 top-0 bottom-0 mx-auto bg-gray-600/50"
       onClick={onClick}
     >
       <div ref={wrapper} className={wrapperClass}>

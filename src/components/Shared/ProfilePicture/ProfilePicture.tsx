@@ -14,15 +14,17 @@ export default function ProfilePicture({
     <div className="w-[74px] h-[74px] rounded-full flex items-center bg-red-500 border-gray-300 border-2 text-white overflow-hidden">
       {loading && (
         // Render a spinner while loading
-        <div className="w-[60px] h-[60px] mx-auto border-t-4 border-white border-solid rounded-full animate-spin"></div>
+        <div className="">
+          <div className="w-[74px] h-[74px] mx-auto border-t-4 border-white border-solid rounded-full animate-spin" />
+        </div>
       )}
       {!loading && picture && (
         <Image
           src={picture}
           alt="Upload preview"
-          className="w-[100%] h-[100%] rounded-full shadow-lg object-cover"
-          width="60"
-          height="60"
+          className="rounded-full object-cover h-[74px] w-auto"
+          width="74"
+          height={74}
         />
       )}
       {!loading && !picture && <Avatar />}
