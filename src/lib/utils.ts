@@ -61,6 +61,7 @@ export const userInfoFormatter = (
     eventOwnerId: userInfo.sub,
     eventOwnerName: `${userInfo.name} ${userInfo.family_name}`,
     eventOwnerEmail: userInfo.email,
+    eventOwnerPicture: userInfo.picture,
   }
 
   return { ...owner, ...eventData }
