@@ -3,7 +3,7 @@ import React from 'react'
 import { headers } from 'next/headers'
 import { Inter } from 'next/font/google'
 import Navbar from '@/components/Shared/NavBar/Navbar'
-import { AuthProvider } from '@/context/AuthProvider/AuthProvider'
+import { AuthProvider } from '@/hooks/AuthProvider/AuthProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -27,7 +27,7 @@ export default function RootLayout(props: {
 
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={inter.className + ' overscroll-none'}>
         <AuthProvider>
           <Navbar path={pathname} />
           <main

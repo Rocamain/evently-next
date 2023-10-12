@@ -1,36 +1,35 @@
 'use server'
 import axios from 'axios'
 import { revalidateTag } from 'next/cache'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
+import { headers } from 'next/headers'
 import {
   setCookies,
   getCookiesToken,
   deleteCookies,
   userInfoFormatter,
-  EventInfoFormatter,
+  // EventInfoFormatter,
 } from '../lib/utils'
 import {
   LoginData,
   LoginResponse,
   AuthResponse,
-  UserData,
   EventData,
   EventDataReceived,
 } from '@/lib/interfaces'
 
 const URL = process.env.API_URL
 
+export const revalidateAuth = () => {
+  revalidateTag('tokenVerified')
+}
 //  Register user function , parsed the request body and call api point to reg the user
 export const registerUser = async (
-  userData: UserData,
+  formData: FormData,
 ): Promise<LoginResponse> => {
   try {
-    const { data } = await axios.post(`${URL}/auth/register`, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userData),
-    })
+    const URL = `${process.env.DB_URL}/join`
+    const { data } = await axios.post(URL, formData)
 
     return data
   } catch (error) {
@@ -41,7 +40,7 @@ export const registerUser = async (
       }
     }
     return {
-      message: null,
+      msg: null,
       userInfo: null,
       error: { message: 'Server is down', name: 'Server error' },
     }
@@ -66,7 +65,7 @@ export const loginUser = async (
     setCookies(AccessToken, RefreshToken, userInfo, ExpiresIn)
     // revalidateTag('tokenVerified')
 
-    return { message: data.message, userInfo, error: null }
+    return { msg: data.message, userInfo, error: null }
   } catch (error) {
     // On Login fail remove old cookies if they exist
 
@@ -75,7 +74,7 @@ export const loginUser = async (
 
       if (dataError) {
         return {
-          message: null,
+          msg: null,
           userInfo: null,
           error: dataError,
         }
@@ -83,7 +82,7 @@ export const loginUser = async (
     }
     console.log(error)
     return {
-      message: null,
+      msg: null,
       userInfo: null,
       error: {
         message: 'Something strange has happened',
@@ -92,11 +91,25 @@ export const loginUser = async (
     }
   }
 }
+export const getPath = () => {
+  const headersList = headers()
+
+  const pathname = headersList.get('x-url') as string
+
+  return pathname
+}
 
 // Logout function
 export const logoutUser = () => {
   deleteCookies()
   revalidateTag('tokenVerified')
+
+  const headersList = headers()
+  const pathname = headersList.get('x-url') as string
+
+  if (pathname !== '/') {
+    redirect('/')
+  }
 }
 
 // Authenticate function verifies access token
@@ -134,13 +147,11 @@ export const createEvent = async (eventData: FormData) => {
 
     try {
       const { DB_URL } = process.env
-      console.log({ DB_URL })
       const res = await axios.post(`${DB_URL}/item`, eventData, {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
       })
-      console.log(res)
 
       return 'created'
     } catch (error) {
@@ -156,19 +167,14 @@ export const createEvent = async (eventData: FormData) => {
 export const getEventData = async (
   id: string,
 ): Promise<EventDataReceived | undefined> => {
-  const res = await fetch(`${process.env.DB_URL}/item/${id}`)
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch data')
+  const response = await fetch(`${process.env.DB_URL}/item/${id}`)
+  const body = await response.json()
+  if (!response.ok) {
+    notFound()
   }
+  return body.data
 
-  const { data } = await res.json()
-  if (data && Object.keys(data).length) {
-    return data
-  }
   // If not found redirect to not found page.
-
-  notFound()
 }
 
 // PENDING IMPLEMENTATION
@@ -176,15 +182,13 @@ export const getEventData = async (
 export const updateEvent = async (eventData: FormData) => {
   const isSubmit = eventData.has('eventId')
   const cookiesInfo = getCookiesToken()
-  console.log({ eventData, isSubmit })
-  if (isSubmit && cookiesInfo) {
-    const { authToken } = cookiesInfo
 
+  if (isSubmit && cookiesInfo) {
     const eventId = eventData.get('eventId')
     eventData.delete('eventId')
 
-    const dataToUpdated = EventInfoFormatter(eventData)
-    console.log({ dataToUpdated, eventId })
+    // const dataToUpdated = EventInfoFormatter(eventData)
+    console.log({ eventId })
     // if (Object.keys(dataToUpdated).length) {
     //   eventData.set('data', JSON.stringify(dataToUpdated))
 

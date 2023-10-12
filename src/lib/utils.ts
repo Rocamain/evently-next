@@ -61,39 +61,42 @@ export const userInfoFormatter = (
     eventOwnerId: userInfo.sub,
     eventOwnerName: `${userInfo.name} ${userInfo.family_name}`,
     eventOwnerEmail: userInfo.email,
+    eventOwnerPicture: userInfo.picture,
   }
 
   return { ...owner, ...eventData }
 }
 
-type InputsNames =
-  | 'eventTitle'
-  | 'eventPhotos'
-  | 'eventDescription'
-  | 'eventTime'
-  | 'eventLink'
-  | 'eventPrice'
+// type InputsNames =
+//   | 'eventTitle'
+//   | 'eventPhotos'
+//   | 'eventDescription'
+//   | 'eventTime'
+//   | 'eventLink'
+//   | 'eventPrice'
+//   | 'eventOwnerId'
 
-export const EventInfoFormatter = (eventData: FormData) => {
-  const inputsNames: Array<InputsNames> = [
-    'eventTitle',
-    'eventPhotos',
-    'eventDescription',
-    'eventTime',
-    'eventLink',
-    'eventPrice',
-  ]
+// export const EventInfoFormatter = (eventData: FormData) => {
+//   const inputsNames: Array<InputsNames> = [
+//     'eventTitle',
+//     'eventPhotos',
+//     'eventDescription',
+//     'eventTime',
+//     'eventLink',
+//     'eventPrice',
+//     'eventOwnerId',
+//   ]
 
-  const data: EventDataToSend = {}
-  inputsNames.forEach((inputName) => {
-    if (eventData.has(inputName)) {
-      const inputValue = eventData.get(inputName) as string
+//   const data: EventDataToSend = {}
+//   inputsNames.forEach((inputName) => {
+//     if (eventData.has(inputName)) {
+//       const inputValue = eventData.get(inputName) as string
 
-      data[inputName] = inputValue
-    }
-  })
-  return data
-}
+//       data[inputName] = inputValue
+//     }
+//   })
+//   return data
+// }
 
 export const getStringDate = (dateToConvert: Date): string => {
   const options = {

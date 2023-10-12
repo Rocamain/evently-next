@@ -59,22 +59,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (response.error) {
         setUser({ userInfo: null })
         return {
-          message: null,
+          msg: null,
           error: response.error,
           userInfo: null,
         }
       } else {
         setUser({ userInfo: response.userInfo })
         return {
-          message: 'Login successful',
+          msg: 'Login successful',
           error: null,
-          userInfo: null,
+          userInfo: response.userInfo,
         }
       }
     } catch (error) {
-      console.error('Login error:', error)
       return {
-        message: null,
+        msg: null,
         error: {
           message: 'Oops, something strange happened',
           name: 'Server error',

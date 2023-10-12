@@ -16,21 +16,21 @@ body {
   color: rgb(var(--foreground-rgb));
 }
 .background-blob {
-  background-image: url(../../public/images/blob/pink-blob.svg),
-    url(../../public/images/blob/blue-blob.svg);
+  background-image: url(/images/blob/pink-blob.svg),
+    url(/images/blob/blue-blob.svg);
   background-position-y: -5%, 120%;
   background-position-x: 2%, 140%;
   background-repeat: no-repeat;
 }
 
 #background-blob {
-  background-image: url(../../public/images/blob/pink-blob.svg),
-    url(../../public/images/blob/blue-blob.svg),
-    url(../../public/images/blob/blue-blob.svg),
-    url(../../public/images/blob/yellow-blob.svg);
+  background-image: url(/images/blob/pink-blob.svg),
+    url(/images/blob/blue-blob.svg), url(/images/blob/blue-blob.svg),
+    url(/images/blob/yellow-blob.svg);
   background-position-y: 15%, 5%, 15%, 25%;
   background-position-x: 60%, 70%, 15%, 80%;
   background-repeat: no-repeat;
+  background-color: transparent;
 }
 
 /* input + span {

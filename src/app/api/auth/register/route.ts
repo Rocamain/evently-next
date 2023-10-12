@@ -1,23 +1,18 @@
 import axios from 'axios'
 import { NextResponse, NextRequest } from 'next/server'
-import { UserData, LoginResponse } from '@/lib/interfaces'
+import { LoginResponse } from '@/lib/interfaces'
 
 // Create the Register Api point to call the DB for Auth
-export async function POST(request: NextRequest, res: NextResponse) {
+export async function POST(request: NextRequest) {
   try {
-    const response = await request.json()
-    const regPayload = response.body as UserData
+    const formData = await request.formData()
     const URL = `${process.env.DB_URL}/join`
-
-    const { data, status, statusText } = await axios.post(URL, regPayload, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+    const { data, status, statusText } = await axios.post(URL, formData)
 
     return NextResponse.json(data, { status, statusText })
   } catch (error) {
     // If axios error
+
     if (axios.isAxiosError<LoginResponse>(error)) {
       // Connection Error with DB
 

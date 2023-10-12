@@ -8,6 +8,7 @@ interface ButtonProps extends LinkProps {
   tealText?: boolean
   bigText?: boolean
   target?: string
+  scroll?: boolean
 }
 
 export const LinkButton: FC<ButtonProps> = ({
@@ -22,6 +23,7 @@ export const LinkButton: FC<ButtonProps> = ({
   circular = false,
   tealText = false,
   bigText = false,
+  prefetch,
 }) => {
   const className = transparent
     ? `${
@@ -44,6 +46,7 @@ export const LinkButton: FC<ButtonProps> = ({
       shallow={shallow}
       className={className}
       target={target}
+      prefetch={prefetch}
     >
       {children}
     </Link>

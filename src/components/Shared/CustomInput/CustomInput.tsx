@@ -10,6 +10,7 @@ interface InputProps {
   label: string
   type: string
   placeholder: string
+  inputData: string
   autoFocus?: boolean
   handleInput: (inputData: string, inputValue: string) => void
   handleResetError: () => void
@@ -22,27 +23,23 @@ export const CustomInput: FC<InputProps> = ({
   pattern,
   placeholder,
   autoFocus,
+  inputData,
   handleInput,
   handleResetError,
 }) => {
-  const [inputData, setInputData] = useState<string>('')
   const [regexError, setRegexError] = useState<boolean>(false)
   const [isTyped, setTyped] = useState<boolean>(false)
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, pattern } = e.target
     handleResetError()
-    setInputData(value)
+    handleInput(label.toLocaleLowerCase(), value)
     setTyped(true)
     if (!value.match(pattern)) {
       setRegexError(true)
     } else {
       setRegexError(false)
     }
-  }
-
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement, Element>) => {
-    handleInput(label.toLocaleLowerCase(), inputData)
   }
 
   return (
@@ -53,11 +50,11 @@ export const CustomInput: FC<InputProps> = ({
         name={label}
         type={type}
         placeholder={placeholder}
+        autoComplete="off"
         pattern={pattern}
         autoFocus={autoFocus}
         value={inputData}
         onChange={handleChange}
-        onBlur={handleBlur}
       />
       <div className="pl-2 w-5 absolute right-2">
         {isTyped && regexError && (
