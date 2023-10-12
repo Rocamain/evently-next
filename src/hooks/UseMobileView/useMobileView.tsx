@@ -27,17 +27,17 @@ export function useMobileView() {
     }
   }, [])
 
-  useEffect(() => {
-    if (isMobile) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'auto'
-    }
+  // useEffect(() => {
+  //   if (isMobile) {
+  //     document.body.style.overflow = 'hidden'
+  //   } else {
+  //     document.body.style.overflow = 'auto'
+  //   }
 
-    return () => {
-      document.body.style.overflow = 'auto'
-    }
-  }, [isMobile])
+  //   return () => {
+  //     document.body.style.overflow = 'auto'
+  //   }
+  // }, [isMobile])
 
   return isMobile
 }
