@@ -1,9 +1,10 @@
 import './globals.css'
 import React from 'react'
 import { Inter } from 'next/font/google'
-import Navbar from '@/components/Shared/NavBar/Navbar'
+import Header from '@/components/Shared/Header/Header'
 import { AuthProvider } from '@/hooks/AuthProvider/AuthProvider'
 import { getPath } from '@/app/actions'
+
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
@@ -22,7 +23,7 @@ export default function RootLayout(props: {
     <html lang="en">
       <body className={inter.className + ' overscroll-none'}>
         <AuthProvider>
-          <Navbar path={pathname} />
+          <Header path={pathname} />
           <main
             id={isMain ? 'background-blob' : undefined}
             className="min-h-full"
@@ -31,6 +32,7 @@ export default function RootLayout(props: {
             {props.modal}
           </main>
         </AuthProvider>
+
         <footer
           style={{
             height: '25vh',

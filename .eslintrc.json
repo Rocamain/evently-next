@@ -3,11 +3,11 @@
     "commonjs": true,
     "node": true,
     "jest": true,
-    "es2021": true
+    "es2023": true
   },
   "extends": [
     "standard",
-    "eslint-config-prettier",
+        "eslint-config-prettier",
     "next",
     "next/core-web-vitals"
   ],
